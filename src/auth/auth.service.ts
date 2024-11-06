@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { AuthModerDto, AuthSchoolDto } from './dto';
+import { AuthModerDto, AuthCompanyDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -51,10 +51,9 @@ export class AuthService {
 
   constructor(private jwtService: JwtService) {}
 
-  validateFounderUser(authPayload: AuthSchoolDto) {
+  validateFounderUser(authPayload: AuthCompanyDto) {
     const user = this.fakeAuthSchool.find(
-      (u) =>
-        u.companyName.toLowerCase() === authPayload.companyName.toLowerCase(),
+      (u) => u.companyName === authPayload.companyName,
     );
 
     if (!user) {
@@ -67,8 +66,14 @@ export class AuthService {
     const { password, ...userData } = user;
 
     const status = this.validateCompanyStatus(user.companyName, 'Founder');
-    if (status === 'active')
-      return { access_token: this.jwtService.sign(userData) };
+    if (status === 'active' || status === 'freez')
+      return {
+        access_token: this.jwtService.sign({
+          ...userData,
+          status,
+          role: 'founder',
+        }),
+      };
 
     return status;
   }
@@ -76,7 +81,7 @@ export class AuthService {
   validateModerUser(authPayload: AuthModerDto) {
     const user = this.fakeUserModer.find(
       (u) =>
-        u.companyName.toLowerCase() === authPayload.companyName.toLowerCase() &&
+        u.companyName === authPayload.companyName &&
         u.login === authPayload.userName,
     );
 
@@ -89,28 +94,35 @@ export class AuthService {
     }
 
     const { password, ...userData } = user;
+
     const status = this.validateCompanyStatus(user.companyName, 'Moderator');
-    if (status === 'active')
-      return { access_token: this.jwtService.sign(userData) };
+    if (status === 'active' || status === 'freez')
+      return {
+        access_token: this.jwtService.sign({
+          ...userData,
+          status,
+          role: 'moder',
+        }),
+      };
 
     return status;
   }
 
   private validateCompanyStatus(companyName: string, userRole: string) {
     const companyStatus = this.companyStatus.find(
-      (c) => c.companyName.toLowerCase() === companyName.toLowerCase(),
+      (c) => c.companyName === companyName,
     );
 
     if (!companyStatus) {
       return { message: 'Company status not found' };
     }
 
-    if (companyStatus.status === 'active') {
-      return 'active';
+    if (companyStatus.status === 'active' || companyStatus.status === 'freez') {
+      return companyStatus.status;
     }
 
     throw new HttpException(
-      `Your company is currently ${companyStatus.status}.`,
+      `Your company is currently BLOCKED.`,
       HttpStatus.FORBIDDEN,
     );
   }
