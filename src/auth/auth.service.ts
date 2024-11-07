@@ -1,129 +1,68 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { AuthModerDto, AuthCompanyDto } from './dto';
+import { AuthModerDto, AuthCompanyDto } from './dto/index';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import { Company } from 'src/schema/company.scheme';
+import { Model } from 'mongoose';
+import { Moder } from 'src/schema/moder.scheme';
+import { CompanyDto } from 'src/admin/dto/company.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  private readonly companyStatus = [
-    {
-      id: 1,
-      companyName: 'itschool',
-      status: 'active',
-    },
-    {
-      id: 2,
-      companyName: 'itschool2',
-      status: 'freez',
-    },
-    {
-      id: 3,
-      companyName: 'itschool3',
-      status: 'blocked',
-    },
-  ];
+  constructor(
+    private jwtService: JwtService,
+    @InjectModel(Company.name) private companyModel: Model<Company>,
+    @InjectModel(Moder.name) private moderModel: Model<Moder>,
+  ) {}
 
-  private readonly fakeAuthSchool = [
-    {
-      id: 1,
-      companyName: 'itschool',
-      password: 'abc123',
-    },
-    {
-      id: 2,
-      companyName: 'itschool2',
-      password: 'abc123',
-    },
-    {
-      id: 3,
-      companyName: 'itschool3',
-      password: 'abc123',
-    },
-  ];
-
-  private readonly fakeUserModer = [
-    {
-      id: 1,
-      companyName: 'itschool',
-      login: 'AB1505260',
-      password: 'abc123',
-    },
-  ];
-
-  constructor(private jwtService: JwtService) {}
-
-  validateFounderUser(authPayload: AuthCompanyDto) {
-    const user = this.fakeAuthSchool.find(
-      (u) => u.companyName === authPayload.companyName,
-    );
-
+  async validateFounderUser(authPayload: AuthCompanyDto) {
+    const user = await this.companyModel.findOne({ companyName: authPayload.companyName });
     if (!user) {
       throw new HttpException('Company not found', HttpStatus.NOT_FOUND);
     }
 
-    if (user.password !== authPayload.password) {
-      throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
-    }
-    const { password, ...userData } = user;
-
-    const status = this.validateCompanyStatus(user.companyName, 'Founder');
-    if (status === 'active' || status === 'freez')
-      return {
-        access_token: this.jwtService.sign({
-          ...userData,
-          status,
-          role: 'founder',
-        }),
-      };
-
-    return status;
-  }
-
-  validateModerUser(authPayload: AuthModerDto) {
-    const user = this.fakeUserModer.find(
-      (u) =>
-        u.companyName === authPayload.companyName &&
-        u.login === authPayload.userName,
-    );
-
-    if (!user) {
-      throw new HttpException('Moderator not found', HttpStatus.NOT_FOUND);
-    }
-
-    if (user.password !== authPayload.password) {
+    if (!(await bcrypt.compare(authPayload.password, user.password))) {
       throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
     }
 
-    const { password, ...userData } = user;
+    const { password, ...userData } = user.toObject();
+    const res = this.validateCompanyStatus(user.status, 'founder', userData);
+    return res;
+  }
 
-    const status = this.validateCompanyStatus(user.companyName, 'Moderator');
+  async validateModerUser(authPayload: AuthModerDto) {
+    try {
+      const { username } = authPayload;
+      const moder = await (await this.moderModel.findOne({ username })).populated('company');
+      console.log(moder);
+      if (!moder) {
+        throw new HttpException('Moderator not found', HttpStatus.NOT_FOUND);
+      }
+
+      if (!(await bcrypt.compare(authPayload.password, moder.password))) {
+        throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
+      }
+
+      const { password, ...userData } = moder;
+      const res = this.validateCompanyStatus(moder.status, 'moder', userData);
+      return res;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  private async validateCompanyStatus(status: string, userRole: string, userData: any) {
     if (status === 'active' || status === 'freez')
       return {
         access_token: this.jwtService.sign({
-          ...userData,
-          status,
-          role: 'moder',
+          sub: userData._id,
+          companyName: userData.companyName,
+          status: status,
+          role: userRole,
         }),
       };
 
-    return status;
-  }
-
-  private validateCompanyStatus(companyName: string, userRole: string) {
-    const companyStatus = this.companyStatus.find(
-      (c) => c.companyName === companyName,
-    );
-
-    if (!companyStatus) {
-      return { message: 'Company status not found' };
-    }
-
-    if (companyStatus.status === 'active' || companyStatus.status === 'freez') {
-      return companyStatus.status;
-    }
-
-    throw new HttpException(
-      `Your company is currently BLOCKED.`,
-      HttpStatus.FORBIDDEN,
-    );
+    throw new HttpException(`Your company is currently BLOCKED.`, HttpStatus.FORBIDDEN);
   }
 }
