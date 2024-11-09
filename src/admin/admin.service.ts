@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AdminDto } from './dto/admin.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Admin } from './schema/admin.schemas';
+import { Admin, AdminDocument } from './schema/admin.schemas';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { UpdatePasswordDto } from './dto/updatePassword.dto';
@@ -60,16 +60,13 @@ export class AdminService {
     }
   }
 
-  // add admins
-  async add({ username, password }: { username: string; password: string }) {
-    try {
-      const hash = await bcrypt.hash(password, 10);
-      await this.adminModel.create({ username, password: hash });
-
-      return { message: 'Admin added!' };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+  // Get admins
+  async getAdmins() {
+    const admins = await this.adminModel
+      .find()
+      .select('_id username createdAt appointed_by')
+      .populate({ path: 'appointed_by', select: 'username' });
+    return admins;
   }
 
   // update admin login and password
@@ -136,9 +133,5 @@ export class AdminService {
     if (!company) throw new HttpException('Company not found', HttpStatus.NOT_FOUND);
 
     return company;
-  }
-
-  async getAdmins() {
-    return await this.adminModel.find().select('_id username createdAt');
   }
 }

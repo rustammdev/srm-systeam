@@ -31,12 +31,19 @@ export class AdminController {
     return this.adminService.validateAdmin(adminDto);
   }
 
-  // Admin uchun Login hamda parol yaratish
+  // add Admin
   @Post()
   @UseGuards(AuthGuard('admin'))
   async addAdmin(@Body() adminPayload: AdminDto, @Req() req: any) {
     const { sub } = req.user;
     return this.adminService.addAdmin(adminPayload, sub);
+  }
+
+  // Get admin
+  @Get()
+  @UseGuards(AuthGuard('admin'))
+  async getAdmins() {
+    return this.adminService.getAdmins();
   }
 
   // Login hamda parolni yangilash
@@ -57,13 +64,6 @@ export class AdminController {
   async deleteAdmin(@Body() data: { username: string; password: string }) {
     const { username, password } = data;
     return await this.adminService.delete(username, password);
-  }
-
-  // Adminlar ro'yxatini olish
-  @Get()
-  @UseGuards(AuthGuard('admin'))
-  async getAdmins() {
-    return this.adminService.getAdmins();
   }
 
   // Yangi company qo'shish
