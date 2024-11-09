@@ -18,7 +18,7 @@ export class Company {
   password: string;
 
   @Prop({
-    required: false,
+    required: true,
     type: String,
     enum: status,
     default: status.active,
