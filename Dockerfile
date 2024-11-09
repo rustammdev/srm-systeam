@@ -1,14 +1,20 @@
-# Use the official MongoDB image
-FROM mongo:latest
+# Node.js rasmidan foydalanamiz
+FROM node:18
 
-# Create the /data/db directory
-RUN mkdir -p /data/db
+# Ilovani ishchi papkaga ko'chirish
+WORKDIR /app
 
-# Set the working directory
-WORKDIR /data/db
+# package.json va package-lock.json ni yuklab olish
+COPY package*.json ./
 
-# Expose the default MongoDB port
-EXPOSE 27017
+# Bog‘lanishlarni o‘rnatish
+RUN npm install
 
-# Start the MongoDB server
-CMD ["mongod"]
+# Ilovani nusxalash
+COPY . .
+
+# Ilova 3000-portda ishlaydi
+EXPOSE 3000
+
+# Asosiy buyruq
+CMD ["npm", "run", "start:dev"]

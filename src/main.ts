@@ -8,9 +8,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      // Noto'g'ri data uchun hatolik yuborish
       forbidNonWhitelisted: true,
-      // Obyektdagi keraksiz qismlarni tozalash
       transform: true,
     }),
   );

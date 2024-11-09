@@ -12,7 +12,7 @@ export class Admin {
   password: string;
 
   @Prop({ required: true, type: mongoose.Schema.ObjectId, ref: 'Admin' })
-  owner: mongoose.Types.ObjectId;
+  appointed_by: mongoose.Types.ObjectId;
 }
 
 export const AdminSchema = SchemaFactory.createForClass(Admin);

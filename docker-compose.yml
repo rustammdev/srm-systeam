@@ -1,0 +1,25 @@
+services:
+  mongo:
+    image: mongo
+    container_name: my-mongo
+    ports:
+      - '27018:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rustam
+      MONGO_INITDB_ROOT_PASSWORD: Rustam0456
+    volumes:
+      - mongo-data:/data/db # ma'lumotlarni saqlash
+
+  app:
+    build: .
+    container_name: my-node-app
+    ports:
+      - '3000:3000'
+    environment:
+      MONGO_URI: mongodb://rustam:Rustam0456@mongo:27017/srm-systeam
+    depends_on:
+      - mongo
+    command: ['npm', 'run', 'start:dev']
+
+volumes:
+  mongo-data:

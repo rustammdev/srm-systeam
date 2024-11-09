@@ -39,7 +39,7 @@ export class AdminService {
   }
 
   // add admins
-  async addAdmin({ username, password }: AdminDto, owner: string) {
+  async addAdmin({ username, password }: AdminDto, id: string) {
     try {
       // Admin mavjud ekanligiga tekshirish
       const admin = await this.adminModel.findOne({ username });
@@ -52,7 +52,19 @@ export class AdminService {
       }
 
       const hash = await bcrypt.hash(password, 10);
-      await this.adminModel.create({ username, password: hash, owner });
+      await this.adminModel.create({ username, password: hash, appointed_by: id });
+
+      return { message: 'Admin added!' };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  // add admins
+  async add({ username, password }: { username: string; password: string }) {
+    try {
+      const hash = await bcrypt.hash(password, 10);
+      await this.adminModel.create({ username, password: hash });
 
       return { message: 'Admin added!' };
     } catch (error) {
@@ -127,6 +139,6 @@ export class AdminService {
   }
 
   async getAdmins() {
-    return await this.adminModel.find();
+    return await this.adminModel.find().select('_id username createdAt');
   }
 }

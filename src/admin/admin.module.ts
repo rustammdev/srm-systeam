@@ -15,7 +15,7 @@ import { AdminCompanyService } from './company.service';
     MongooseModule.forFeature([{ name: Company.name, schema: CompanySchema }]),
     JwtModule.register({
       secret: process.env.JWT_PASSWORD_ADMIN,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '3d' },
     }),
   ],
   controllers: [AdminController],

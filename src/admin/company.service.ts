@@ -34,8 +34,8 @@ export class AdminCompanyService {
   }
 
   // Get company without companyName
-  async getCompany(companyId: string) {
-    const company = await this.companyModel.findOne({ companyName: companyId });
+  async getCompany(companyName: string) {
+    const company = await this.companyModel.findOne({ companyName });
     if (!company) throw new HttpException('Company not found', HttpStatus.NOT_FOUND);
 
     const { password, ...companyData } = company.toObject();
@@ -52,7 +52,7 @@ export class AdminCompanyService {
     }
   }
 
-  // update
+  // update status
   async updateStatus(name: string, newStatus: string) {
     try {
       const filter = { companyName: name };

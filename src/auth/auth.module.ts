@@ -17,7 +17,7 @@ import { ModerStrategy } from './strategies/moderStrategy';
     MongooseModule.forFeature([{ name: Moder.name, schema: ModerSchema }]),
     JwtModule.register({
       secret: process.env.JWT_PASSWORD,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '3d' },
     }),
   ],
   controllers: [AuthController],

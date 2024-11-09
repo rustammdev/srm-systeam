@@ -5,6 +5,7 @@ import { AuthModerDto } from 'src/auth/dto';
 import { Moder } from 'src/schema/moder.scheme';
 import * as bcrypt from 'bcryptjs';
 import { ModerDto } from './dto/moder.dto';
+import path from 'node:path/win32';
 
 @Injectable()
 export class CustomerService {
@@ -13,7 +14,6 @@ export class CustomerService {
   // add moderator
   async addModer({ username, password }: ModerDto, company: string) {
     try {
-      return { username, password, company };
       // Moder mavjud ekanligiga tekshirish
       const admin = await this.moderModel.findOne({ username });
       if (admin) {
@@ -27,9 +27,34 @@ export class CustomerService {
       const hash = await bcrypt.hash(password, 10);
       await this.moderModel.create({ username, password: hash, company });
 
-      return { message: 'Moder added!', username: 'username' };
+      return { message: 'Moder added!', username };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  // tezligini oshirish kerak
+  // Get all moders in spesific company
+  async getAll(companyId: string) {
+    console.log('keldi', companyId);
+    const moder = await this.moderModel
+      .find({ company: companyId })
+      .select('_id username company createdAt');
+    return moder;
+  }
+
+  // Get moder unique id
+  async get(id: string) {
+    const moder = await this.moderModel
+      .find({ _id: id })
+      .select('_id username company createdAt ')
+      .populate({ path: 'company', select: 'companyName status createdAt' });
+    return moder;
+  }
+
+  // delete moder
+  async deleteModer(id: string) {
+    const moder = await this.moderModel.findByIdAndDelete(id);
+    return moder;
   }
 }

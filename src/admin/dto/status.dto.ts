@@ -7,7 +7,7 @@ enum Status {
   BLOCKED = 'blocked',
 }
 export class StatusDto {
-  // // status - freez | active | blocked
+  // status - freez | active | blocked
   @IsString()
   @IsNotEmpty()
   @IsEnum(Status, { message: 'Status must be one of: active, freez, blocked' })

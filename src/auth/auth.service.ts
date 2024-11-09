@@ -18,6 +18,7 @@ export class AuthService {
 
   async validateFounderUser(authPayload: AuthCompanyDto) {
     const user = await this.companyModel.findOne({ companyName: authPayload.companyName });
+
     if (!user) {
       throw new HttpException('Company not found', HttpStatus.NOT_FOUND);
     }
