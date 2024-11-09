@@ -33,12 +33,12 @@ export class CustomerController {
     return this.customerService.addModer(moderDto, req.user['sub']);
   }
 
-  // @Get('status/f')
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
-  // @Roles('founder', 'moder')
-  // status(@Request() req: any) {
-  //   return req.user;
-  // }
+  @Get('status/f')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('founder', 'moder')
+  status(@Request() req: any) {
+    return req.user;
+  }
 
   // @Get('status/m')
   // @UseGuards(AuthGuard('jwt'), RolesGuard)
