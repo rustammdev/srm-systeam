@@ -10,10 +10,11 @@ import { CustomerModule } from './customer/customer.module';
 import 'dotenv/config';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guard/roles.guard';
+import { Moder } from './schema/moder.scheme';
 
 @Module({
-  imports: [AuthModule, MongooseModule.forRoot(process.env.MONGO_URL), AdminModule, CustomerModule],
-  controllers: [AppController, CustomerController],
-  providers: [AppService, CustomerService],
+  imports: [MongooseModule.forRoot(process.env.MONGO_URL), AuthModule, AdminModule, CustomerModule],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

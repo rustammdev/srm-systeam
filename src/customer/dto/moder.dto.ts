@@ -1,13 +1,11 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class AuthModerDto {
-  // Login
-  @IsString()
+export class ModerDto {
   @IsNotEmpty()
+  @IsString()
   username: string;
 
-  // Password
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   password: string;
 }

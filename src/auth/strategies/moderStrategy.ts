@@ -10,7 +10,7 @@ export class ModerStrategy extends PassportStrategy(Strategy, 'moder') {
   }
 
   async validate(username: string, password: string) {
-    const authPayload = { companyName: username, username, password };
+    const authPayload = { username, password };
     const user = await this.authService.validateModerUser(authPayload);
 
     if (!user) throw new UnauthorizedException('Moderator not found');
