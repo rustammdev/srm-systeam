@@ -14,6 +14,7 @@ export class AuthController {
 
   @Post('login/moder')
   loginModer(@Body(new ValidationPipe()) authPayload: AuthModerDto) {
+    console.log(authPayload);
     return this.authService.validateModerUser(authPayload);
   }
 

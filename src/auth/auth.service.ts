@@ -2,11 +2,11 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthModerDto, AuthCompanyDto } from './dto/index';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { Company } from 'src/schema/company.scheme';
 import { Model } from 'mongoose';
-import { Moder } from 'src/schema/moder.scheme';
 import { CompanyDto } from 'src/admin/dto/company.dto';
 import * as bcrypt from 'bcryptjs';
+import { Company } from 'src/modules/customer/schema/company.scheme';
+import { Moder } from 'src/modules/customer/schema/moder.scheme';
 
 @Injectable()
 export class AuthService {
@@ -35,8 +35,9 @@ export class AuthService {
   async validateModerUser(authPayload: AuthModerDto) {
     try {
       const { username } = authPayload;
-      const moder = await (await this.moderModel.findOne({ username })).populated('company');
-      console.log(moder);
+      const moder = await this.moderModel
+        .findOne({ username })
+        .populate({ path: 'company', select: '_id companyName status' });
       if (!moder) {
         throw new HttpException('Moderator not found', HttpStatus.NOT_FOUND);
       }
@@ -46,7 +47,7 @@ export class AuthService {
       }
 
       const { password, ...userData } = moder;
-      const res = this.validateCompanyStatus(moder.status, 'moder', userData);
+      const res = this.validateCompanyStatus(moder.company['status'], 'moder', userData);
       return res;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

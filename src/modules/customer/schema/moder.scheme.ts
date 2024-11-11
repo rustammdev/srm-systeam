@@ -11,7 +11,7 @@ export class Moder {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company',
   })
-  company: mongoose.Types.ObjectId;
+  company: Company;
 
   @Prop({
     required: true,

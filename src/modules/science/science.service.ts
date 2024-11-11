@@ -33,7 +33,7 @@ export class ScienceService {
       );
 
       if (!science)
-        throw new HttpException("Science not found or does't updated.", HttpStatus.NOT_FOUND);
+        throw new HttpException("Science not found or doesn't updated.", HttpStatus.NOT_FOUND);
       return science;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

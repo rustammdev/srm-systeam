@@ -1,19 +1,32 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { MongooseModule } from '@nestjs/mongoose';
+import { AttendanceModule } from './modules/attendance/attendance.module';
+import { CustomerModule } from './modules/customer/customer.module';
+import { ScienceModule } from './modules/science/science.module';
+import { StudentModule } from './modules/student/student.module';
+import { TeacherModule } from './modules/teacher/teacher.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { GroupModule } from './modules/group/group.module';
 import { AdminModule } from './admin/admin.module';
-import { CustomerController } from './customer/customer.controller';
-import { CustomerService } from './customer/customer.service';
-import { CustomerModule } from './customer/customer.module';
-import 'dotenv/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
+import { AppService } from './app.service';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './guard/roles.guard';
-import { Moder } from './schema/moder.scheme';
+import { Module } from '@nestjs/common';
+import 'dotenv/config';
 
 @Module({
-  imports: [MongooseModule.forRoot(process.env.MONGO_URL), AuthModule, AdminModule, CustomerModule],
+  imports: [
+    MongooseModule.forRoot(process.env.MONGO_URL),
+    AuthModule,
+    AdminModule,
+    CustomerModule,
+    ScienceModule,
+    StudentModule,
+    TeacherModule,
+    GroupModule,
+    PaymentModule,
+    AttendanceModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -7,9 +7,9 @@ import { FounderStrategy } from './strategies/founder.stratgy';
 // import { ModerStrategy } from './strategies/moderStrategy';
 import { JwtStrategy } from './strategies/jwt.stratgy';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Company, CompanySchema } from 'src/schema/company.scheme';
-import { Moder, ModerSchema } from 'src/schema/moder.scheme';
 import { ModerStrategy } from './strategies/moderStrategy';
+import { Company, CompanySchema } from 'src/modules/customer/schema/company.scheme';
+import { Moder, ModerSchema } from 'src/modules/customer/schema/moder.scheme';
 
 @Module({
   imports: [

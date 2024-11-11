@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { CompanyDto } from './dto/company.dto';
-import { Company } from 'src/schema/company.scheme';
+import { Company } from 'src/modules/customer/schema/company.scheme';
 
 @Injectable()
 export class AdminCompanyService {

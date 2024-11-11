@@ -1,11 +1,16 @@
+import { Company } from 'src/modules/customer/schema/company.scheme';
+import { Student } from 'src/modules/student/schema/student.scheme';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Mongoose } from 'mongoose';
-import { Student } from './student.scheme';
 
 export type AttendanceDocument = HydratedDocument<Attendance>;
 
+// Yo'qlama
 @Schema({ timestamps: true })
 export class Attendance {
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Company' })
+  company: Company;
+
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Student' })
   student: Student;
 

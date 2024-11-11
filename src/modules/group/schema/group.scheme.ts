@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Mongoose } from 'mongoose';
-import { Science } from './science.scheme';
-import { Teacher } from './teacher.scheme';
+import { Company } from 'src/modules/customer/schema/company.scheme';
+import { Science } from 'src/modules/science/schema/science.schema';
+import { Teacher } from 'src/modules/teacher/schema/teacher.scheme';
 
 export type GroupDocument = HydratedDocument<Group>;
 
@@ -13,6 +14,9 @@ enum status {
 
 @Schema({ timestamps: true })
 export class Group {
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Company' })
+  company: Company;
+
   @Prop({ required: true, unique: true, type: String })
   name: string;
 
@@ -22,11 +26,16 @@ export class Group {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' })
   teacher: Teacher;
 
-  @Prop({ required: true, type: Date })
-  start_date: string;
+  // Dars kunlari (masalan: [1,3,5] - Dush/Chor/Juma)
+  @Prop({ type: [Number], required: true })
+  weekDays: number[];
 
-  @Prop({ required: true, type: Date })
-  end_date: string;
+  // Dars vaqti
+  @Prop({ required: true, type: Object })
+  time: {
+    start: string; // "14:30"
+    end: string; // "15:50"
+  };
 
   @Prop({
     required: true,

@@ -6,8 +6,8 @@ import { AdminStrategy } from './strategies/admin.strategy';
 import { JwtStrategyAdmin } from './strategies/jwt.stratgy';
 import { MongooseModule, Schema } from '@nestjs/mongoose';
 import { Admin, AdminSchema } from './schema/admin.schemas';
-import { Company, CompanySchema } from 'src/schema/company.scheme';
 import { AdminCompanyService } from './company.service';
+import { Company, CompanySchema } from 'src/modules/customer/schema/company.scheme';
 
 @Module({
   imports: [

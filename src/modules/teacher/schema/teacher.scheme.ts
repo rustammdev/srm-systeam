@@ -1,12 +1,15 @@
+import { Science } from 'src/modules/science/schema/science.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Group } from './group.scheme';
-import { Science } from './science.scheme';
+import { Company } from 'src/modules/customer/schema/company.scheme';
 
 export type TeacherDocument = HydratedDocument<Teacher>;
 
 @Schema({ timestamps: true })
 export class Teacher {
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Company' })
+  company: Company;
+
   @Prop({ required: true, type: String })
   firstname: string;
 

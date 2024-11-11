@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { UpdatePasswordDto } from './dto/updatePassword.dto';
 import { CompanyDto } from './dto/company.dto';
-import { Company } from 'src/schema/company.scheme';
+import { Company } from 'src/modules/customer/schema/company.scheme';
 
 @Injectable()
 export class AdminService {
