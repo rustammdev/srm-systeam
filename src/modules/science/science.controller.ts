@@ -25,8 +25,8 @@ export class ScienceController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
   async addScience(@Body(new ValidationPipe()) sciencePayload: CreateScienceDto, @Req() req: any) {
-    const { sub } = req.user;
-    return this.scienceService.add(sub, sciencePayload);
+    const id = req.user['companyId'] ?? req.user['sub'];
+    return this.scienceService.add(id, sciencePayload);
   }
 
   // Get sciences
@@ -34,8 +34,8 @@ export class ScienceController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
   async getSciences(@Req() req: any) {
-    const { sub } = req.user;
-    return this.scienceService.getAll(sub);
+    const id = req.user['companyId'] ?? req.user['sub'];
+    return this.scienceService.getAll(id);
   }
 
   // Update science

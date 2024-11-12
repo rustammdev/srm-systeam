@@ -41,8 +41,8 @@ export class GroupController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
   async getGroups(@Req() req: any) {
-    const { sub } = req.user;
-    return this.groupService.getAll(sub);
+    const id = req.user['companyId'] ?? req.user['sub'];
+    return this.groupService.getAll(id);
   }
 
   // Get group, students

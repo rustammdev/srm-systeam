@@ -28,8 +28,17 @@ export class AuthService {
     }
 
     const { password, ...userData } = user.toObject();
-    const res = this.validateCompanyStatus(user.status, 'founder', userData);
-    return res;
+    if (user.status === 'active' || user.status === 'freez')
+      return {
+        access_token: this.jwtService.sign({
+          sub: userData._id,
+          companyName: userData.companyName,
+          status: user.status,
+          role: 'founder',
+        }),
+      };
+
+    throw new HttpException(`Your company is currently BLOCKED.`, HttpStatus.FORBIDDEN);
   }
 
   async validateModerUser(authPayload: AuthModerDto) {
@@ -46,9 +55,17 @@ export class AuthService {
         throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
       }
 
-      const { password, ...userData } = moder;
-      const res = this.validateCompanyStatus(moder.company['status'], 'moder', userData);
-      return res;
+      const status = moder.company['status'];
+      if (status === 'active' || status === 'freez')
+        return {
+          access_token: this.jwtService.sign({
+            sub: moder._id,
+            companyName: moder.company['companyName'],
+            companyId: moder.company['_id'],
+            status,
+            role: 'moder',
+          }),
+        };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
