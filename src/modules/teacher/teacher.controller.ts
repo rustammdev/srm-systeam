@@ -10,11 +10,11 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
+import { Roles } from 'src/common/guard/decorator/roles.decorator';
+import { RolesGuard } from 'src/common/guard/roles.guard';
+import { CreateTeacherDto, UpdateTeacherDto } from './dto';
 import { TeacherService } from './teacher.service';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from 'src/common/guard/roles.guard';
-import { Roles } from 'src/common/guard/decorator/roles.decorator';
-import { CreateTeacherDto, UpdateTeacherDto } from './dto';
 
 @Controller('company')
 export class TeacherController {
