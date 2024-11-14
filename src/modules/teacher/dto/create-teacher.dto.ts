@@ -15,5 +15,5 @@ export class CreateTeacherDto {
 
   @IsString()
   @IsNotEmpty()
-  specialty: string;
+  description: string;
 }

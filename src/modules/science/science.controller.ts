@@ -38,6 +38,15 @@ export class ScienceController {
     return this.scienceService.getAll(id);
   }
 
+  // Get all science and groups
+  @Get('scinces')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('founder', 'moder')
+  async getGroupData(@Req() req: any) {
+    const id = req.user['companyId'] ?? req.user['sub'];
+    return this.scienceService.createGroupData(id);
+  }
+
   // Update science
   @Put('scince/:id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)

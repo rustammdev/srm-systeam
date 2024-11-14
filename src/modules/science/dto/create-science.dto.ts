@@ -3,6 +3,10 @@ import { IsEmpty, IsNotEmpty, IsString } from 'class-validator';
 export class CreateScienceDto {
   @IsString()
   @IsNotEmpty()
+  teacher: string;
+
+  @IsString()
+  @IsNotEmpty()
   science: string;
 
   @IsString()

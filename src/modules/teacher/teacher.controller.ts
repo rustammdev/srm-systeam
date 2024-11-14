@@ -20,7 +20,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class TeacherController {
   constructor(private teacherService: TeacherService) {}
 
-  //  Create group
+  //  Create teacher
   @Post('teacher')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
@@ -28,8 +28,8 @@ export class TeacherController {
     @Body(new ValidationPipe()) teacherPayload: CreateTeacherDto,
     @Req() req: any,
   ) {
-    const { sub } = req.user;
-    return this.teacherService.add(sub, teacherPayload);
+    const id = req.user['companyId'] ?? req.user['sub'];
+    return this.teacherService.add(id, teacherPayload);
   }
 
   // Get teachers
@@ -37,8 +37,8 @@ export class TeacherController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
   async getSciences(@Req() req: any) {
-    const { sub } = req.user;
-    return this.teacherService.getAll(sub);
+    const id = req.user['companyId'] ?? req.user['sub'];
+    return this.teacherService.getAll(id);
   }
 
   // Delelet teacher - id

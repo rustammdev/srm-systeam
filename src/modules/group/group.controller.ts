@@ -24,8 +24,8 @@ export class GroupController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
   async createGroup(@Body(new ValidationPipe()) groupPayload: CreateGroupDto, @Req() req: any) {
-    const { sub } = req.user;
-    return this.groupService.add(sub, groupPayload);
+    const id = req.user['companyId'] ?? req.user['sub'];
+    return this.groupService.add(id, groupPayload);
   }
 
   // Delete Group- id

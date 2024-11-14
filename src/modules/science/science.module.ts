@@ -4,9 +4,17 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Science, ScienceSchema } from './schema/science.schema';
 import { ScienceController } from './science.controller';
 import { ScienceService } from './science.service';
+import { Teacher, TeacherSchema } from '../teacher/schema/teacher.scheme';
+import { TeacherModule } from '../teacher/teacher.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Science.name, schema: ScienceSchema }])],
+  imports: [
+    TeacherModule,
+    MongooseModule.forFeature([
+      { name: Science.name, schema: ScienceSchema },
+      { name: Teacher.name, schema: TeacherSchema },
+    ]),
+  ],
   controllers: [ScienceController],
   providers: [ScienceService],
 })

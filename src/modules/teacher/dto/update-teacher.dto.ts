@@ -12,8 +12,4 @@ export class UpdateTeacherDto {
   @IsString()
   @IsOptional()
   phoneNumber?: string;
-
-  @IsString()
-  @IsOptional()
-  specialty?: string;
 }

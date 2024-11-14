@@ -19,8 +19,8 @@ export class Teacher {
   @Prop({ required: true, type: String })
   phoneNumber: string;
 
-  @Prop({ required: true, type: mongoose.Schema.ObjectId, ref: 'Science' })
-  specialty: Science;
+  @Prop({ required: true, type: String })
+  description: string;
 }
 
 export const TeacherSchema = SchemaFactory.createForClass(Teacher);

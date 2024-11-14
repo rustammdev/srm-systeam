@@ -7,9 +7,9 @@ import { Teacher } from 'src/modules/teacher/schema/teacher.scheme';
 export type GroupDocument = HydratedDocument<Group>;
 
 enum status {
-  active,
-  freez,
-  complate,
+  active = 'active',
+  freez = 'freez',
+  complate = 'complate',
 }
 
 @Schema({ timestamps: true })
@@ -33,8 +33,8 @@ export class Group {
   // Dars vaqti
   @Prop({ required: true, type: Object })
   time: {
-    start: string; // "14:30"
-    end: string; // "15:50"
+    start: string;
+    end: string;
   };
 
   @Prop({

@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Group } from './schema/group.scheme';
 import { Model } from 'mongoose';
 import { CreateGroupDto } from './dto';
+import { Teacher } from '../teacher/schema/teacher.scheme';
 
 @Injectable()
 export class GroupService {
@@ -15,10 +16,10 @@ export class GroupService {
         company: sub,
         ...groupPayload,
       });
-      return science;
+      return { message: "Guruh ma'lumotlari muvaffaqiyatli saqlandi!", ...science };
     } catch (error) {
       if (error.code === 11000)
-        throw new HttpException('This science alredy exist.', HttpStatus.BAD_REQUEST);
+        throw new HttpException('Guruh nomi band, boshqa nom tanlang.', HttpStatus.BAD_REQUEST);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }

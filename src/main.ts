@@ -13,9 +13,10 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: 'http://localhost:5173/',
-    methods: 'GET,POST,PUT, PUTCH, DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
   await app.listen(process.env.PORT ?? 3000);
 }
