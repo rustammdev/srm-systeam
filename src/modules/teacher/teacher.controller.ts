@@ -36,7 +36,7 @@ export class TeacherController {
   @Get('teacher')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
-  async getSciences(@Req() req: any) {
+  async getTeachers(@Req() req: any) {
     const id = req.user['companyId'] ?? req.user['sub'];
     return this.teacherService.getAll(id);
   }
@@ -45,7 +45,7 @@ export class TeacherController {
   @Delete('teacher/:id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
-  async delSciences(@Param('id') id: string) {
+  async delTeacher(@Param('id') id: string) {
     return this.teacherService.del(id);
   }
 

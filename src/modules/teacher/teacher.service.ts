@@ -11,11 +11,11 @@ export class TeacherService {
   // Create Teacher
   async add(companyId: string, teacherPayload: CreateTeacherDto) {
     try {
-      const science = await this.teacherModel.create({
+      const teacher = await this.teacherModel.create({
         company: companyId,
         ...teacherPayload,
       });
-      return science;
+      return teacher;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -38,15 +38,15 @@ export class TeacherService {
   // update science
   async update(id: string, teacherPayload: UpdateTeacherDto) {
     try {
-      const science = await this.teacherModel.findByIdAndUpdate(
+      const teacher = await this.teacherModel.findByIdAndUpdate(
         id,
         { $set: teacherPayload },
         { new: true },
       );
 
-      if (!science)
-        throw new HttpException("Science not found or doesn't updated.", HttpStatus.NOT_FOUND);
-      return science;
+      if (!teacher)
+        throw new HttpException("Teacher not found or doesn't updated.", HttpStatus.NOT_FOUND);
+      return teacher;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

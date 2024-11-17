@@ -1,30 +1,31 @@
 import { IsArray, IsEnum, IsNotEmpty, IsObject, IsOptional, IsString } from 'class-validator';
+// Enum yaratamiz
 enum Status {
   ACTIVE = 'active',
   FREEZ = 'freez',
   COMPLATE = 'complate',
 }
-export class CreateGroupDto {
+export class UpdateGroupDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   name: string;
 
   // Mongoose id
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   science: string;
 
   // Mongoose id
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   teacher: string;
 
   @IsArray()
-  @IsNotEmpty()
+  @IsOptional()
   weekDays: [string];
 
   @IsObject()
-  @IsNotEmpty()
+  @IsOptional()
   time: {
     start: string; // "14:30"
     end: string; // "15:50"

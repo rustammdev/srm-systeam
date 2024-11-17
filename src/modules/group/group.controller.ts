@@ -5,12 +5,13 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
-import { CreateGroupDto } from './dto';
+import { CreateGroupDto, UpdateGroupDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/common/guard/roles.guard';
 import { Roles } from 'src/common/guard/decorator/roles.decorator';
@@ -45,8 +46,8 @@ export class GroupController {
     return this.groupService.getAll(id);
   }
 
-  // Get group, students
-  @Delete('group/:id')
+  // Get group and students
+  @Get('group/:id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('founder', 'moder')
   async getGroup(@Param('id') id: string) {
@@ -55,5 +56,13 @@ export class GroupController {
   }
 
   // Update group - change Status
-  // Add student
+  @Put('group/:id')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('founder', 'moder')
+  async updateGroup(
+    @Body(new ValidationPipe()) updateGroupPayload: UpdateGroupDto,
+    @Param('id') id: string,
+  ) {
+    return this.groupService.update(id, updateGroupPayload);
+  }
 }
