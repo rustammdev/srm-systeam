@@ -11,6 +11,14 @@ export class TeacherService {
   // Create Teacher
   async add(companyId: string, teacherPayload: CreateTeacherDto) {
     try {
+      const exist = await this.teacherModel.findOne({
+        firstname: teacherPayload.firstname,
+        lastname: teacherPayload.lastname,
+      });
+
+      if (exist)
+        throw new HttpException('Bunday nomadi ustoz allaqachon mavjud.', HttpStatus.BAD_REQUEST);
+
       const teacher = await this.teacherModel.create({
         company: companyId,
         ...teacherPayload,

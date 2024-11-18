@@ -24,7 +24,6 @@ export class StudentService {
       });
 
       if (existingStudent) {
-        // Agar bunday o'quvchi mavjud bo'lsa, xatolik qaytarish
         throw new HttpException(
           "Bunday o'quvchi bu guruhda allaqachon mavjud.",
           HttpStatus.BAD_REQUEST,
