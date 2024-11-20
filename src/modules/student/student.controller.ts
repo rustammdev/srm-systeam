@@ -5,13 +5,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/common/guard/roles.guard';
 import { CreateStudentDto } from './dto';
 import { PaymentService } from '../payment/payment.service';
+import { AttendanceService } from '../attendance/attendance.service';
+import { Types } from 'mongoose';
 
 @Controller('company')
 export class StudentController {
-  constructor(
-    private studentService: StudentService,
-    private paymentService: PaymentService,
-  ) {}
+  constructor(private readonly studentService: StudentService) {}
 
   // Add student
   @Post('student')

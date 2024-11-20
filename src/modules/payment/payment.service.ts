@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Payment } from './schema/payment.scheme';
 import { Model } from 'mongoose';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
-import * as moment from 'moment-timezone';
 
 @Injectable()
 export class PaymentService {

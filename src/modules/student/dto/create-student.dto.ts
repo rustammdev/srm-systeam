@@ -1,4 +1,4 @@
-import { IsEmpty, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEmpty, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 enum paymentStatus {
   paid = 'paid',
   unpaid = 'unpaid',
@@ -20,8 +20,16 @@ export class CreateStudentDto {
   lastname: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   phoneNumber: string;
+
+  @IsBoolean()
+  @IsOptional()
+  toAttend: boolean;
+
+  @IsString()
+  @IsOptional()
+  description: string;
 
   @IsString()
   @IsNotEmpty()

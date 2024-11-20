@@ -19,7 +19,7 @@ export class CretaAttendanceDto {
   @IsMongoId()
   group: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsBoolean()
   toAttend: boolean;
 
