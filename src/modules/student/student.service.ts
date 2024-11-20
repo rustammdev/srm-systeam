@@ -3,7 +3,7 @@ import { Payment } from '../payment/schema/payment.scheme';
 import { Student } from './schema/student.scheme';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment-timezone';
-import { CreateStudentDto, CretaAttendanceDto } from './dto';
+import { CreateStudentDto, CretaAttendanceDto, updateStudentDto } from './dto';
 import { Connection, Model } from 'mongoose';
 import { Types } from 'mongoose';
 import { Attendance } from '../attendance/schema/attendance.scheme';
@@ -138,41 +138,21 @@ export class StudentService {
     }
   }
 
-  // Create attendance
-  async createAttendance(
-    companyId: string,
-    attendancePayload: CretaAttendanceDto,
-  ): Promise<Attendance> {
+  // update student
+  async update(id: string, studentPayload: updateStudentDto) {
     try {
-      // Joriy vaqtni UTC+5 (O'zbekiston vaqti) bilan olish
-      const today = new Date();
-      const uzOffset = 5; // O'zbekiston UTC+5
-      const uzTime = new Date(today.getTime() + uzOffset * 60 * 60 * 1000);
+      const student = await this.studentModel.findByIdAndUpdate(
+        id,
+        { $set: studentPayload },
+        { new: true },
+      );
 
-      // Sanani 00:00:00 ga o'rnatish (faqat sana qismi)
-      const date = new Date(Date.UTC(uzTime.getFullYear(), uzTime.getMonth(), uzTime.getDate()));
-
-      const { group, student } = attendancePayload;
-
-      // Mavjud yo'qlamani tekshirish
-      const existingAttendance = await this.attendanceModel.findOne({
-        group,
-        date,
-      });
-
-      if (existingAttendance) {
-        throw new HttpException("Ushbu sanada yo'qlama allaqachon mavjud", HttpStatus.BAD_REQUEST);
-      }
-
-      // Yangi yo'qlama yaratish
-      const attendance = await this.attendanceModel.create({
-        company: companyId,
-        date,
-        group,
-        student,
-      });
-
-      return attendance;
+      if (!student)
+        throw new HttpException(
+          "O'quvchi malumotlari topilmadi yoki yangilanishda xatolik yuz berdi.",
+          HttpStatus.NOT_FOUND,
+        );
+      return student;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

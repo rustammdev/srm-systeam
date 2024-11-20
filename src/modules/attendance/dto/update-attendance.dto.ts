@@ -7,22 +7,21 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import mongoose from 'mongoose';
 
-export class CretaAttendanceDto {
-  @IsNotEmpty()
+export class UpdateAttendanceDto {
+  @IsOptional()
   @IsMongoId()
-  student: string;
+  student?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsMongoId()
-  group: string;
+  group?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsBoolean()
-  toAttend: boolean;
+  toAttend?: boolean;
 
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 }
