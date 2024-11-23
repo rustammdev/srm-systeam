@@ -19,8 +19,8 @@ export class Waiting {
   @Prop({ required: true, type: String })
   phoneNumber: string;
 
-  @Prop({ required: false, type: mongoose.Schema.Types.ObjectId, ref: 'Science' })
-  science: Science;
+  @Prop({ required: true, type: String })
+  science: string;
 
   @Prop({ required: true, type: String })
   description: string;

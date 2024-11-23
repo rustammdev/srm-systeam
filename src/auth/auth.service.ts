@@ -11,7 +11,7 @@ import { Moder } from 'src/modules/customer/schema/moder.scheme';
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
     @InjectModel(Company.name) private companyModel: Model<Company>,
     @InjectModel(Moder.name) private moderModel: Model<Moder>,
   ) {}
@@ -37,7 +37,6 @@ export class AuthService {
           role: 'founder',
         }),
       };
-
     throw new HttpException(`Your company is currently BLOCKED.`, HttpStatus.FORBIDDEN);
   }
 
