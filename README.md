@@ -36,22 +36,11 @@ Loyihani ishga tushirish uchun quyidagi amallarni bajaring:
 
 Agar sizda Docker o'rnatilgan bo'lsa, loyihani Docker yordamida ham ishga tushirishingiz mumkin:
 
-1. **Docker imidjini yarating:**
+1. **Docker konteynerini ishga tushiring:**
 
     ```bash
-    docker build -t srm-systeam .
+    docker compose up
     ```
-
-2. **Docker konteynerini ishga tushiring:**
-
-    ```bash
-    docker run -p 3000:3000 srm-systeam
-    ```
-
-Yoki `docker-compose.yml` faylidan foydalanib:
-
-```bash
-docker-compose up
 
 Systeam Design - Tushinishga oson bo'lishi uchun
 ![srm-oquv markazi drawio](https://github.com/user-attachments/assets/d443dcb5-1789-4d4e-9585-70ef08eee76c)
